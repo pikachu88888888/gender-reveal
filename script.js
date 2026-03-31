@@ -32,13 +32,14 @@ const sounds = {
 
 sounds.intro.loop = true;
 sounds.menu.loop = true;
+sounds.celebrate.loop = true;
 
-sounds.intro.volume = 0.15;
-sounds.menu.volume = 0.15;
-sounds.click.volume = 0.15;
-sounds.star.volume = 0.8;
-sounds.shake.volume = 0.8;
-sounds.celebrate.volume = 0.8;
+sounds.intro.volume = 0.08;
+sounds.menu.volume = 0.08;
+sounds.click.volume = 0.08;
+sounds.star.volume = 0.2;
+sounds.shake.volume = 0.2;
+sounds.celebrate.volume = 0.2;
 
 let audioUnlocked = false;
 
@@ -134,9 +135,9 @@ function renderBoot() {
 function renderPresents() {
   app.innerHTML = `
     <div class="screen star-screen">
-      <div class="star" style="top: 25%; animation-delay: 0s;"></div>
-      <div class="star" style="top: 35%; animation-delay: 0.2s;"></div>
-      <div class="star" style="top: 45%; animation-delay: 0.4s;"></div>
+    <div class="star" style="top: -5%; right: -15%; animation-delay: 0s;"></div>
+    <div class="star" style="top: -5%; right: -5%; animation-delay: 0.2s;"></div>
+    <div class="star" style="top: -5%; right: -30%; animation-delay: 0.4s;"></div>
       <p class="presents-text">Jimmy Q Presents</p>
     </div>
   `;

@@ -43,11 +43,20 @@ a {
   align-items: center;
 }
 
-.nav-cta {
+.nav-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  text-decoration: none;
   border: 2px solid white;
   padding: 6px 10px;
   color: white;
   text-decoration: none;
+}
+
+.nav-center:hover {
+  color: yellow;
 }
 
 .nav-auth {
@@ -104,8 +113,8 @@ body {
 /* ---------- STAR ---------- */
 /* container */
 .star-screen {
-  position: relative;
-  overflow: hidden;
+  position: absolute;
+  inset: 0;
 }
 
 .star {
@@ -117,8 +126,8 @@ body {
 
   box-shadow: 0 0 10px white, 0 0 20px white;
 
-  top: -20px;
-  right: -10%;   /* start from right side */
+  top: -10%;
+  right: -10%; /* start slightly off-screen */
 
   animation: shoot 1.2s linear forwards;
 }
@@ -135,8 +144,11 @@ body {
 }
 
 @keyframes shoot {
+   from {
+    transform: translate(0, 0); /* start slightly off top-right */
+  }
   to {
-    transform: translate(-120vw, 120vh); /* left + down */
+    transform: translate(-60vw, 120vh); /* left + down */
   }
 }
 
