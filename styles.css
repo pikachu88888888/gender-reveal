@@ -351,3 +351,49 @@ body {
 .boy { background-color: #7ec8e3; }
 .girl { background-color: #ffb6c1; }
 
+/* -- Mobile Menu -- */
+
+/* ---------- HAMBURGER ---------- */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-top: 2px solid white;
+  background: black;
+}
+
+.mobile-menu.open {
+  display: flex;
+}
+
+.mobile-link {
+  color: white;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.mobile-link:hover {
+  color: yellow;
+}
+
+@media (max-width: 996px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-center,
+  .nav-auth {
+    display: none;
+  }
+}
