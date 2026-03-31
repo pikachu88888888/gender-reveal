@@ -252,7 +252,7 @@ function renderReveal() {
     </div>
   `;
 
-function shareReveal() {
+window.shareReveal = function() {
   const name = gameState.name || "";
   const genderText = gameState.gender === "boy" ? "Boy" : "Girl";
 

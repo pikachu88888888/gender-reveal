@@ -139,8 +139,10 @@ body {
   height: 2px;
   background: linear-gradient(to left, white, transparent);
 
-  top: 2px;
-  left: -40px;   /* tail stays correct */
+  top: -10px;
+  left: 2px;   /* tail stays correct */
+  transform: rotate(-65deg);
+  transform-origin: left center;
 }
 
 @keyframes shoot {
