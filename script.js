@@ -133,17 +133,31 @@ function renderBoot() {
 }
 
 function renderPresents() {
+  const isMobile = window.innerWidth <= 996;
+
+  const stars = isMobile ? [
+    { right: '10%', delay: '0s' },
+    { right: '5%', delay: '0.2s' },
+    { right: '25%', delay: '0.4s' },
+  ] : [
+    { right: '-15%', delay: '0s' },
+    { right: '-5%', delay: '0.2s' },
+    { right: '-30%', delay: '0.4s' },
+  ];
+
   app.innerHTML = `
     <div class="screen star-screen">
-    <div class="star" style="top: -5%; right: -15%; animation-delay: 0s;"></div>
-    <div class="star" style="top: -5%; right: -5%; animation-delay: 0.2s;"></div>
-    <div class="star" style="top: -5%; right: -30%; animation-delay: 0.4s;"></div>
+      <div class="star" style="top: -5%; right: ${stars[0].right}; animation-delay: ${stars[0].delay};"></div>
+      <div class="star" style="top: -5%; right: ${stars[1].right}; animation-delay: ${stars[1].delay};"></div>
+      <div class="star" style="top: -5%; right: ${stars[2].right}; animation-delay: ${stars[2].delay};"></div>
       <p class="presents-text">Jimmy Q Presents</p>
     </div>
   `;
 
   playStarSound();
 }
+
+
 
 function renderStork() {
   app.innerHTML = `
