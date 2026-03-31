@@ -133,6 +133,12 @@ function renderBoot() {
 }
 
 function renderPresents() {
+  
+  // preload stork video while user reads this screen
+  const preloadVideo = document.createElement("video");
+  preloadVideo.src = "assets/video/stork.mp4";
+  preloadVideo.preload = "auto";
+  
   const isMobile = window.innerWidth <= 996;
 
   const stars = isMobile ? [
