@@ -199,6 +199,7 @@ function renderIntroDialogue() {
 
 function typeLine() {
   const box = document.getElementById("dialogueBox");
+  if (!box) return; // user navigated away, stop typing
 
   if (charIndex < introLines[dialogueIndex].length) {
     box.textContent += introLines[dialogueIndex][charIndex];
@@ -233,8 +234,29 @@ function renderReveal() {
       <img src="assets/images/baby.png" class="swaddle" />
       <div class="flash"></div>
       <p id="revealText"></p>
+      <button id="shareBtn" class="share-btn" style="display:none" onclick="shareReveal()">Share 🎉</button>
     </div>
   `;
+
+function shareReveal() {
+  const name = gameState.name || "";
+  const genderText = gameState.gender === "boy" ? "Boy" : "Girl";
+
+  const shareData = {
+    title: "Gender Reveal!",
+    text: `It's a ${genderText}! Welcome, ${name}! 🎉`,
+    url: window.location.href
+  };
+
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => {});
+  } else {
+    // fallback: copy to clipboard
+    navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`).then(() => {
+      alert("Copied to clipboard!");
+    });
+  }
+}
 
   startRevealAnimation();
 }
@@ -321,6 +343,10 @@ function startRevealAnimation() {
 
       document.getElementById("revealText").innerHTML =
       `It's a ${genderText}!<br>Welcome, ${name}!`;
+
+      // show share button
+        const shareBtn = document.getElementById("shareBtn");
+        if (shareBtn) shareBtn.style.display = "block";
 
       if (audioUnlocked) {
         sounds.celebrate.currentTime = 0;
