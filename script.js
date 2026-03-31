@@ -72,7 +72,7 @@ function playStarSound() {
 const introLines = [
   "Hello there!",
   "Welcome to the world!",
-  "We are Mom and Dad.",
+  "We are Dad and Mom.",
   "We love you very much.",
   "Your journey is just beginning..."
 ];
