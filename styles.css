@@ -108,11 +108,6 @@ body {
   overflow: hidden;
 }
 
-/* star = diagonal streak */
-.star-screen {
-  position: relative;
-}
-
 .star {
   position: absolute;
   width: 6px;
@@ -122,7 +117,7 @@ body {
 
   box-shadow: 0 0 10px white, 0 0 20px white;
 
-  top: 20%;
+  top: -20px;
   right: -10%;   /* start from right side */
 
   animation: shoot 1.2s linear forwards;
