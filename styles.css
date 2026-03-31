@@ -1,0 +1,346 @@
+button,
+.menu-option:not(.disabled),
+a {
+  cursor: pointer;
+}
+
+/* ---------- NAVBAR ---------- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+
+  display: flex;
+  justify-content: center;
+
+  background: black;
+  border-bottom: 2px solid white;
+
+  z-index: 1000;
+}
+
+.nav-inner {
+  width: 100%;
+  max-width: 1100px;
+  padding: 0 24px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+}
+
+.nav-right {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.nav-cta {
+  border: 2px solid white;
+  padding: 6px 10px;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-auth {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+}
+
+/* -- body and app container -- */
+
+body {
+  margin: 0;
+  font-family: 'Press Start 2P', cursive;
+  background: black;
+  color: white;
+  padding-top: 60px;
+  transition: background-color 0.5s ease;
+}
+
+#app {
+  position: relative;
+  overflow: hidden;
+  width: 90vw;
+  max-width: 700px;
+  aspect-ratio: 1 / 1;
+  margin: 80px auto 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: inherit;
+}
+
+.screen {
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  border: 6px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.screen p {
+  margin: 24px 0;
+}
+
+/* ---------- STAR ---------- */
+/* container */
+.star-screen {
+  position: relative;
+  overflow: hidden;
+}
+
+/* star = diagonal streak */
+.star-screen {
+  position: relative;
+}
+
+.star {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+
+  box-shadow: 0 0 10px white, 0 0 20px white;
+
+  top: 20%;
+  right: -10%;   /* start from right side */
+
+  animation: shoot 1.2s linear forwards;
+}
+
+.star::after {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(to left, white, transparent);
+
+  top: 2px;
+  left: -40px;   /* tail stays correct */
+}
+
+@keyframes shoot {
+  to {
+    transform: translate(-120vw, 120vh); /* left + down */
+  }
+}
+
+/* ---------- VIDEO ---------- */
+.video-screen { 
+  position: relative; 
+  overflow: hidden;
+}
+
+.bg-video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- STORK TEXT ---------- */
+.top-title {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: black;
+  background: rgba(255,255,255,0.7);
+  padding: 6px 10px;
+  font-size: 36px;
+}
+
+.bottom-cta {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: black;
+  background: rgba(255,255,255,0.7);
+  padding: 6px 10px;
+}
+
+/* ---------- MENU ---------- */
+.menu-option {
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.menu-option.disabled {
+  color: gray;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.menu-option:not(.disabled):hover {
+  color: yellow;
+}
+
+/* ---------- INTRO (MOM & DAD) ---------- */
+
+.intro-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.parents-sprite {
+  width: 160px;
+}
+
+/* ---------- NAME ---------- */
+
+.name-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px; /* reduced from 40 */
+}
+
+.name-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px; /* tighter */
+}
+
+/* input field */
+.name-content input {
+  width: 220px;
+  padding: 12px;
+
+  font-size: 14px;
+  font-family: inherit;
+  text-align: center;
+
+  border: 2px solid black;
+  background: white;
+  color: black;
+}
+
+/* confirm button */
+.name-content button {
+  width: 220px;
+  padding: 12px;
+
+  font-size: 14px;
+  font-family: inherit;
+
+  border: 2px solid black;
+  background: white;
+  color: black;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.name-content button:hover {
+  background: white;
+  color: black;
+}
+
+/* error text */
+#error {
+  font-size: 10px;
+  color: red;
+    display: none; /* hidden by default */
+  margin: 0;
+}
+
+/* sprite */
+.sprite {
+  width: 110px; /* slightly smaller for balance */
+}
+
+/* ---------- REVEAL ---------- */
+.swaddle {
+  width: 100px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+
+@keyframes shake {
+  0%   { transform: rotate(0deg); }
+  20%  { transform: rotate(-12deg); }
+  40%  { transform: rotate(12deg); }
+  60%  { transform: rotate(-10deg); }
+  80%  { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.shake {
+  animation: shake 0.5s ease 8;
+}
+
+.confetti {
+  position: fixed;
+  top: -10px;
+  width: 6px;
+  height: 10px;
+  background: red;
+  animation: fall 2s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+/* ---------- EVOLUTION FLASH ---------- */
+
+.flash {
+  position: absolute;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.flash.active {
+  animation: flashAnim 0.4s ease;
+}
+
+@keyframes flashAnim {
+  0% { opacity: 0; }
+  40% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* baby pop */
+.reveal-baby {
+  width: 140px;
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  80% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ---------- THEMES ---------- */
+.boy { background-color: #7ec8e3; }
+.girl { background-color: #ffb6c1; }
+
