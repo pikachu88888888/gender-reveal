@@ -348,6 +348,9 @@ function launchConfetti() {
 
 // ---------- INPUT ----------
 function advanceScreen(e) {
+  // ignore clicks outside #app
+  if (!e.target.closest("#app") && e.type === "click") return;
+  
   if (e.target.closest("button") || e.target.closest("input")) return;
 
   if (!audioUnlocked) audioUnlocked = true;
@@ -376,7 +379,20 @@ document.addEventListener("keydown", advanceScreen);
 // ---------- INIT ----------
 render();
 
+// ---------- MOBILE MENU ----------
+
+// ---------- MOBILE MENU ----------
 function toggleMenu() {
   const menu = document.getElementById("mobileMenu");
-  menu.classList.toggle("open");
+  const overlay = document.getElementById("mobileOverlay");
+  const hamburger = document.getElementById("hamburger");
+  const isOpen = menu.classList.toggle("open");
+  overlay.classList.toggle("open");
+  hamburger.textContent = isOpen ? "✕" : "☰";
+}
+
+function closeMenu() {
+  document.getElementById("mobileMenu").classList.remove("open");
+  document.getElementById("mobileOverlay").classList.remove("open");
+  document.getElementById("hamburger").textContent = "☰";
 }
