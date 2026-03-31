@@ -136,8 +136,13 @@ function renderPresents() {
   
   // preload stork video while user reads this screen
   const preloadVideo = document.createElement("video");
-  preloadVideo.src = "assets/video/stork.mp4";
+  preloadVideo.style.display = "none";
+  const source = document.createElement("source");
+  source.src = "assets/video/stork.mp4";
+  source.type = "video/mp4";
+  preloadVideo.appendChild(source);
   preloadVideo.preload = "auto";
+  document.body.appendChild(preloadVideo);
   
   const isMobile = window.innerWidth <= 996;
 
@@ -257,6 +262,8 @@ function renderReveal() {
       <button id="shareBtn" class="share-btn" style="display:none" onclick="shareReveal()">Share 🎉</button>
     </div>
   `;
+  startRevealAnimation();
+}
 
 window.shareReveal = function() {
   const name = gameState.name || "";
@@ -276,9 +283,6 @@ window.shareReveal = function() {
       alert("Copied to clipboard!");
     });
   }
-}
-
-  startRevealAnimation();
 }
 
 // ---------- ACTIONS ----------
