@@ -282,6 +282,13 @@ body {
   width: 110px; /* slightly smaller for balance */
 }
 
+/* parents text box was way too wide */ 
+#dialogueBox {
+  max-width: 400px;
+  line-height: 2;
+}
+
+
 /* ---------- REVEAL ---------- */
 .swaddle {
   width: 100px;
@@ -365,6 +372,7 @@ body {
   background: white;
   color: black;
 }
+
 
 /* ---------- THEMES ---------- */
 .boy { background-color: #7ec8e3; }
@@ -452,4 +460,99 @@ body {
   width: auto;
   margin: 8px auto;
   padding: 8px 16px;
+}
+
+
+
+/* ---------- REQUEST PAGE ---------- */
+.request-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.request-box {
+  width: 100%;
+  max-width: 600px;
+  border: 6px solid white;
+  padding: 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.request-title {
+  font-size: 24px;
+  text-align: center;
+  margin: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.field label {
+  font-size: 14px;
+}
+
+.field input,
+.field textarea {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 12px;
+  background: white;
+  color: black;
+  border: 2px solid white;
+  resize: none;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.stars {
+  display: flex;
+  gap: 8px;
+}
+
+.star-btn {
+  font-size: 28px;
+  color: gray;
+  cursor: pointer;
+  transition: color 0.1s;
+}
+
+.star-btn.active {
+  color: gold;
+}
+
+.request-box button {
+  font-family: inherit;
+  font-size: 12px;
+  padding: 14px;
+  background: white;
+  color: black;
+  border: 2px solid white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.request-box button:hover {
+  background: black;
+  color: white;
+}
+
+.form-error {
+  font-size: 10px;
+  color: red;
+  margin: 0;
+}
+
+.form-success {
+  font-size: 10px;
+  color: lightgreen;
+  margin: 0;
 }

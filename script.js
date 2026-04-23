@@ -1,11 +1,49 @@
 const app = document.getElementById("app");
 
+// ---------- CIPHER ----------
+const CIPHER_SHIFT = 7;
+
+function encodeName(name) {
+  return name.split('').map(c => {
+    if (c.match(/[a-z]/i)) {
+      const base = c <= 'Z' ? 65 : 97;
+      return String.fromCharCode((c.charCodeAt(0) - base + CIPHER_SHIFT) % 26 + base);
+    }
+    return c;
+  }).join('');
+}
+
+function decodeName(encoded) {
+  return encoded.split('').map(c => {
+    if (c.match(/[a-z]/i)) {
+      const base = c <= 'Z' ? 65 : 97;
+      return String.fromCharCode((c.charCodeAt(0) - base + 26 - CIPHER_SHIFT) % 26 + base);
+    }
+    return c;
+  }).join('');
+}
+
 // ---------- STATE ----------
 const gameState = {
   currentScreen: 0,
   gender: null,
-  name: ""
+  name: "",
+  isShared: false
 };
+
+// ---------- SHARED MODE DETECTION ----------
+(function detectSharedLink() {
+  const params = new URLSearchParams(window.location.search);
+  const g = params.get('g');
+  const n = params.get('n');
+
+  if (g && n) {
+    gameState.isShared = true;
+    gameState.gender = g === 'b' ? 'boy' : 'girl';
+    gameState.name = decodeName(n);
+    gameState.currentScreen = 0;
+  }
+})();
 
 // ---------- HELPERS ----------
 function getBabySprite() {
@@ -14,7 +52,6 @@ function getBabySprite() {
     : "assets/images/girl.png";
 }
 
-// preload to avoid flicker on reveal
 function preloadImage(src) {
   const img = new Image();
   img.src = src;
@@ -78,46 +115,40 @@ const introLines = [
   "Your journey is just beginning..."
 ];
 
+const sharedLines = [
+  "Hi there!",
+  "We have some news...",
+  "We are expecting a baby!",
+  "We are so excited to share this with you.",
+  "Are you ready to find out?"
+];
+
 let dialogueIndex = 0;
 let charIndex = 0;
+let currentLines = [];
 
 // ---------- RENDER ----------
 function render() {
+  if (gameState.isShared) {
+    switch (gameState.currentScreen) {
+      case 0: renderBoot(); break;
+      case 10: playMusic("intro"); renderPresents(); break;
+      case 11: renderStork(); break;
+      case 12: renderSharedDialogue(); break;
+      case 13: stopAllMusic(); renderReveal(); break;
+    }
+    return;
+  }
+
   switch (gameState.currentScreen) {
-    case 0:
-      renderBoot();
-      break;
-
-    case 1:
-      playMusic("intro");
-      renderPresents();
-      break;
-
-    case 2:
-      renderStork();
-      break;
-
-    case 3:
-      playMusic("menu");
-      renderMenu();
-      break;
-
-    case 4:
-      renderGender();
-      break;
-
-    case 5:
-      renderIntroDialogue();
-      break;
-
-    case 6:
-      renderNameInput();
-      break;
-
-    case 7:
-      stopAllMusic();
-      renderReveal();
-      break;
+    case 0: renderBoot(); break;
+    case 1: playMusic("intro"); renderPresents(); break;
+    case 2: renderStork(); break;
+    case 3: playMusic("menu"); renderMenu(); break;
+    case 4: renderGender(); break;
+    case 5: renderIntroDialogue(); break;
+    case 6: renderNameInput(); break;
+    case 7: stopAllMusic(); renderReveal(); break;
   }
 }
 
@@ -133,8 +164,6 @@ function renderBoot() {
 }
 
 function renderPresents() {
-  
-  // preload stork video while user reads this screen
   const preloadVideo = document.createElement("video");
   preloadVideo.style.display = "none";
   const source = document.createElement("source");
@@ -143,7 +172,7 @@ function renderPresents() {
   preloadVideo.appendChild(source);
   preloadVideo.preload = "auto";
   document.body.appendChild(preloadVideo);
-  
+
   const isMobile = window.innerWidth <= 996;
 
   const stars = isMobile ? [
@@ -168,23 +197,17 @@ function renderPresents() {
   playStarSound();
 }
 
-
-
 function renderStork() {
   app.innerHTML = `
     <div class="screen video-screen">
       <video class="bg-video" autoplay muted loop playsinline>
         <source src="assets/video/stork.mp4" type="video/mp4">
       </video>
-
       <div class="top-title">
         <div>Not PKMN</div>
         <div>GENDER REVEAL</div>
       </div>
-
-      <div class="bottom-cta">
-        Press any key...
-      </div>
+      <div class="bottom-cta">Press any key...</div>
     </div>
   `;
 }
@@ -216,7 +239,26 @@ function renderIntroDialogue() {
       <div id="dialogueBox"></div>
     </div>
   `;
+  dialogueIndex = 0;
+  charIndex = 0;
+  typeLineFrom(introLines);
+}
 
+function renderSharedDialogue() {
+  playMusic("menu");
+  app.innerHTML = `
+    <div class="screen intro-screen">
+      <img src="assets/images/parents.png" class="parents-sprite" />
+      <div id="dialogueBox"></div>
+    </div>
+  `;
+  dialogueIndex = 0;
+  charIndex = 0;
+  typeLineFrom(sharedLines);
+}
+
+function typeLineFrom(lines) {
+  currentLines = lines;
   dialogueIndex = 0;
   charIndex = 0;
   typeLine();
@@ -224,10 +266,10 @@ function renderIntroDialogue() {
 
 function typeLine() {
   const box = document.getElementById("dialogueBox");
-  if (!box) return; // user navigated away, stop typing
+  if (!box) return;
 
-  if (charIndex < introLines[dialogueIndex].length) {
-    box.textContent += introLines[dialogueIndex][charIndex];
+  if (charIndex < currentLines[dialogueIndex].length) {
+    box.textContent += currentLines[dialogueIndex][charIndex];
     charIndex++;
     setTimeout(typeLine, 30);
   }
@@ -242,16 +284,13 @@ function renderNameInput() {
         <p id="error" class="error"></p>
         <button class="confirm-btn" onclick="submitName()">Confirm</button>
       </div>
-
       <img src="assets/images/baby.png" class="sprite"/>
     </div>
   `;
-
   document.getElementById("nameInput").focus();
 }
 
 function renderReveal() {
-  // preload correct sprite before animation starts
   preloadImage(getBabySprite());
 
   app.innerHTML = `
@@ -265,20 +304,23 @@ function renderReveal() {
   startRevealAnimation();
 }
 
+// ---------- SHARE ----------
 window.shareReveal = function() {
   const name = gameState.name || "";
   const genderText = gameState.gender === "boy" ? "Boy" : "Girl";
+  const encoded = encodeName(name);
+  const g = gameState.gender === 'boy' ? 'b' : 'g';
+  const shareUrl = `${window.location.origin}${window.location.pathname}?g=${g}&n=${encoded}`;
 
   const shareData = {
     title: "Gender Reveal!",
     text: `It's a ${genderText}! Welcome, ${name}! 🎉`,
-    url: window.location.href
+    url: shareUrl
   };
 
   if (navigator.share) {
     navigator.share(shareData).catch(() => {});
   } else {
-    // fallback: copy to clipboard
     navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`).then(() => {
       alert("Copied to clipboard!");
     });
@@ -295,30 +337,25 @@ function startGame() {
 function selectGender(gender) {
   playClick();
   gameState.gender = gender;
-
   document.body.classList.remove("boy", "girl");
   document.body.classList.add(gender);
-
   gameState.currentScreen = 5;
   render();
 }
 
 function submitName() {
   playClick();
-
   const input = document.getElementById("nameInput");
   const errorEl = document.getElementById("error");
   const value = input.value.trim();
 
   if (!value) {
     errorEl.textContent = "Name cannot be missing - no!";
-    errorEl.style.display = "block";   // 👈 show error
+    errorEl.style.display = "block";
     return;
   }
 
-  // clear error when valid
   errorEl.style.display = "none";
-
   gameState.name = value;
   gameState.currentScreen = 7;
   render();
@@ -333,48 +370,41 @@ function startRevealAnimation() {
 
   if (audioUnlocked) {
     sounds.shake.currentTime = 0;
-    sounds.shake.play();
-
-    if (sounds.shake.duration) {
-      duration = sounds.shake.duration;
-    }
+    sounds.shake.play().catch(() => {});
+    if (sounds.shake.duration) duration = sounds.shake.duration;
   }
 
-  // sync shake animation to audio
   swaddle.style.animation = `shake ${duration / 6}s ease 6`;
 
-  // 🔥 slight scale before reveal (adds tension)
   setTimeout(() => {
     swaddle.style.transform = "scale(1.15)";
   }, duration * 1000 - 300);
 
-  // 🔥 evolution moment
   setTimeout(() => {
-    // flash
     flash.classList.add("active");
 
-    // swap during flash (preloaded → no flicker)
     setTimeout(() => {
       swaddle.outerHTML = `
         <img src="${getBabySprite()}" class="sprite reveal-baby" />
       `;
     }, 120);
 
-    // reveal text + celebration
     setTimeout(() => {
       const name = gameState.name || "";
       const genderText = gameState.gender === "boy" ? "BOY" : "GIRL";
 
       document.getElementById("revealText").innerHTML =
-      `It's a ${genderText}!<br>Welcome, ${name}!`;
+        `It's a ${genderText}!<br>Welcome, ${name}!`;
 
-      // show share button
-        const shareBtn = document.getElementById("shareBtn");
-        if (shareBtn) shareBtn.style.display = "block";
+      document.body.classList.remove("boy", "girl");
+      document.body.classList.add(gameState.gender);
+
+      const shareBtn = document.getElementById("shareBtn");
+      if (shareBtn) shareBtn.style.display = "block";
 
       if (audioUnlocked) {
         sounds.celebrate.currentTime = 0;
-        sounds.celebrate.play();
+        sounds.celebrate.play().catch(() => {});
       }
 
       launchConfetti();
@@ -389,22 +419,47 @@ function launchConfetti() {
     c.className = "confetti";
     c.style.left = Math.random() * 100 + "%";
     c.style.background = ["#ff69b4", "#7ec8e3", "#ffd700"][Math.floor(Math.random()*3)];
-
     document.body.appendChild(c);
-
     setTimeout(() => c.remove(), 2000);
   }
 }
 
 // ---------- INPUT ----------
 function advanceScreen(e) {
-  // ignore clicks outside #app
   if (!e.target.closest("#app") && e.type === "click") return;
-  
   if (e.target.closest("button") || e.target.closest("input")) return;
 
   if (!audioUnlocked) audioUnlocked = true;
 
+  if (gameState.isShared) {
+    if (gameState.currentScreen === 0) {
+      audioUnlocked = true;
+      gameState.currentScreen = 10;
+    }
+    else if (gameState.currentScreen === 10) {
+      gameState.currentScreen = 11; // took out music here, now just advances.
+    }
+    else if (gameState.currentScreen === 11) {
+      playClick();
+      gameState.currentScreen = 12;
+    }
+    else if (gameState.currentScreen === 12) {
+      playClick();
+      if (dialogueIndex < sharedLines.length - 1) {
+        dialogueIndex++;
+        charIndex = 0;
+        document.getElementById("dialogueBox").textContent = "";
+        typeLine();
+        return;
+      } else {
+        gameState.currentScreen = 13;
+      }
+    } else return;
+    render();
+    return;
+  }
+
+  // normal flow
   if (gameState.currentScreen === 0) gameState.currentScreen = 1;
   else if (gameState.currentScreen === 1) gameState.currentScreen = 2;
   else if (gameState.currentScreen === 2) gameState.currentScreen = 3;
@@ -428,8 +483,6 @@ document.addEventListener("keydown", advanceScreen);
 
 // ---------- INIT ----------
 render();
-
-// ---------- MOBILE MENU ----------
 
 // ---------- MOBILE MENU ----------
 function toggleMenu() {
