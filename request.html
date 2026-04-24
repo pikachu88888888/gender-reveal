@@ -74,7 +74,7 @@
   </div>
 
   <script>
-    emailjs.init("iZyVZQ756L9ZVifyO"); // replace after EmailJS setup
+    emailjs.init("iZyVZQ756L9ZVifyO"); // replace after EmailJS Public Key setup
 
     let selectedRating = 0;
 
@@ -99,8 +99,15 @@
       errorEl.textContent = '';
       successEl.textContent = '';
 
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
       if (!name || !email || !idea || !selectedRating) {
         errorEl.textContent = 'Please fill in all fields and select a rating.';
+        return;
+      }
+
+      if (!emailRegex.test(email)) {
+        errorEl.textContent = 'Please enter a valid email address.';
         return;
       }
 

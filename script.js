@@ -314,7 +314,7 @@ window.shareReveal = function() {
 
   const shareData = {
     title: "Gender Reveal!",
-    text: `It's a ${genderText}! Welcome, ${name}! 🎉`,
+    text: `I have some news to share with you! 🎉`,
     url: shareUrl
   };
 
